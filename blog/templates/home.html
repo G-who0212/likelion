@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+{{user.location}}에 사는 {{user.university}}에 다니는 {{user.nickname}}입니다.
+<a href="?search=true&writer={{user.nickname}}">내가 쓴 글</a>
+{% endif %}
+    <h1>Blog Project</h1>
+    <div class="container">
+    {% for blog in blogs %}
+        <div>
+            <h3>{{blog.title}}</h3>
+            {{blog.writer}}
+            {{blog.summary}} <a href="{%url 'detail' blog.id%}">...more</a> 
+             <!-- path-converter를 활용하기 위해 detail함수로 넘길때 blog.id까지 같이 넘김 -->
+            <br>
+        </div>
+    {%endfor%}
+    </div>    
+    <!-- paginator기능이 구현되는 곳 -->
+    {% if blogs.has_previous %}
+    <a href="?page=1">처음</a>
+    <a href="?page={{blogs.previous_page_number}}">이전</a>
+    {% endif %}
+    <span>{{blogs.number}}</span>
+    <span>of</span>
+    <span>{{blogs.paginator.num_pages}}</span>
+    {% if blogs.has_next %}
+    <a href="?page={{blogs.next_page_number}}">다음</a>
+    <a href="?page={{blogs.paginator.num_pages}}">마지막</a>
+    {% endif %}
+{% endblock %}
