@@ -24,9 +24,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-l%v*(=-yo^5#3^jy^mn76
 #os.environ.get('변수명', '기본값(원래 있던 값)')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (os.environ.get('DEBUG', 'True') != 'False')
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'account.CustomUser' # 이 줄을 추가해 줘야 확장시킨 user확장기능을 활용할 수 있다.(내가 만든 CustomUser를 활용할 수 있다.)
 
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -149,3 +151,6 @@ AWS_STORAGE_BUCKET_NAME = 'hoo-likelion-django-lesson2' #사용할 버킷 이름
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_REGION_NAME = 'ap-northeast-2'
 #AWS_S3_CUSTOM_DOMAIN = 
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
